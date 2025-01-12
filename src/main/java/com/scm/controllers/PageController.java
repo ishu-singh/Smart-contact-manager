@@ -1,5 +1,6 @@
 package com.scm.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -8,9 +9,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.scm.entities.User;
 import com.scm.forms.UserForm;
+import com.scm.helpers.Message;
+import com.scm.helpers.MessageType;
+import com.scm.services.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
+
+    @Autowired
+    private UserService userService;
 
 
     @RequestMapping("/home")
@@ -52,14 +61,36 @@ public class PageController {
     }
     //processing registration form
     @RequestMapping(value="/do-register",method = RequestMethod.POST)
-    public String registerUser(@ModelAttribute UserForm userForm){
+    public String registerUser(@ModelAttribute UserForm userForm, HttpSession session){
         System.out.println("this is my register page");
         //fetch the data
         System.out.println(userForm);
 
         //validate the data
         //save to database
-        //message-successfull
+        // User user=User.builder()
+        // .userName(userForm.getName())
+        // .userEmail(userForm.getEmail())
+        // .userPassword(userForm.getPassword())
+        // .phoneNumber(userForm.getPhoneNumber())
+        // .about(userForm.getAbout())
+        // .build();
+
+        User user=new User();
+        user.setUserName(userForm.getName());
+        user.setUserEmail(userForm.getEmail()); 
+        user.setUserPassword(userForm.getPassword());   
+        user.setPhoneNumber(userForm.getPhoneNumber()); 
+        user.setAbout(user.getAbout());
+       User savedUser= userService.saveUser(user);
+       System.out.println("user saved with id "+savedUser.getUserId());
+        
+        //message-successfull, we can use session
+       Message message= Message.builder().content("Registration Successfull").type(MessageType.green).build();
+        session.setAttribute("message", message);
+
+
+
         //redirect to login page
 
         return "redirect:/register";

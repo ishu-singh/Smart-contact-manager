@@ -1,14 +1,15 @@
 package com.scm.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.util.List;
-
-
+import java.util.UUID;
 import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
@@ -30,7 +31,9 @@ import lombok.Setter;
 public class User {
 
     @Id
-    private int userId;
+    @Column(name = "user_id", nullable = false, unique = true, length = 36)
+    private String userId = UUID.randomUUID().toString();
+    
     @Column(name="user_name",nullable=false)
     private String userName;
     private String userPassword;
@@ -47,6 +50,7 @@ public class User {
     private boolean phoneVerified=false;
 
     //Self,google,facebook,github(how he signed up)
+    @Enumerated(value=EnumType.STRING)
     private Providers provider=Providers.SELF;
     private String providerId;
 

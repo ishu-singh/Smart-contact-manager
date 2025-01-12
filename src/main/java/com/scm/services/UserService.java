@@ -13,12 +13,16 @@ public interface UserService {
 
     Optional<User> updatUser(User user);
 
-    void deleteUser(User user);
+    void deleteUser(String id);
 
     boolean isUserExist(String id);
 
 
     List<User> getAllUsers();
+
+    //add more methods here related to businss logic
+
+     
 
 
     
