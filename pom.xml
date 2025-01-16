@@ -47,6 +47,14 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		 
+	<!-- we are adding this dependency in order to secure each user profile -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
+ 
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -99,4 +107,6 @@
 		</plugins>
 	</build>
 
+
+	
 </project>
