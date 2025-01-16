@@ -3,7 +3,10 @@ package com.scm.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,12 +17,18 @@ import com.scm.helpers.MessageType;
 import com.scm.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class PageController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/")
+    public String index(){
+        return "redirect:/home";
+    }
 
 
     @RequestMapping("/home")
@@ -47,7 +56,7 @@ public class PageController {
         System.out.println("this is my contact page");
         return "contact";
     }
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login(){
         System.out.println("this is my login page");
         return "login";
@@ -61,12 +70,18 @@ public class PageController {
     }
     //processing registration form
     @RequestMapping(value="/do-register",method = RequestMethod.POST)
-    public String registerUser(@ModelAttribute UserForm userForm, HttpSession session){
+    public String registerUser(@Valid @ModelAttribute UserForm userForm,BindingResult rBindingResult, HttpSession session){
         System.out.println("this is my register page");
         //fetch the data
         System.out.println(userForm);
 
         //validate the data
+        if(rBindingResult.hasErrors()){
+            System.out.println("error "+rBindingResult);
+            return "register";
+        }
+
+
         //save to database
         // User user=User.builder()
         // .userName(userForm.getName())
