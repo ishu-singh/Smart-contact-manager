@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,7 +45,7 @@ public class SecurityConfig {
     // configuration of authentication provider
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         // user detail service object
         daoAuthenticationProvider.setUserDetailsService(securityCustomUserDetailService);
@@ -115,6 +116,10 @@ public class SecurityConfig {
         httpSecuirty.logout(logoutForm->{
             logoutForm.logoutUrl("/do-logout");
             logoutForm.logoutSuccessUrl("/login?logout=true");
+        });
+        //oauth configuration
+        httpSecuirty.oauth2Login(oauth->{
+            oauth.loginPage("/login");
         });
 
         return httpSecuirty.build();
